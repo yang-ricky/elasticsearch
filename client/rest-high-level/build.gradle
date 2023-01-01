@@ -41,6 +41,7 @@ dependencies {
   testImplementation "com.carrotsearch.randomizedtesting:randomizedtesting-runner:${versions.randomizedrunner}"
   testImplementation "junit:junit:${versions.junit}"
   //this is needed to make RestHighLevelClientTests#testApiNamingConventions work from IDEs
+  //Ricky
   testImplementation project(":rest-api-spec")
   // Needed for serialization tests:
   // (In order to serialize a server side class to a client side class or the other way around)

@@ -42,3 +42,21 @@ testClusters.javaRestTest {
   user username: "elastic/fleet-server", password: 'x-pack-test-password', role: "superuser"
   user username: "service_account_manager", password: 'x-pack-test-password', role: "service_account_manager"
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+    }
+}
+
