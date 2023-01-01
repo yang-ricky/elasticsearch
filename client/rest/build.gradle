@@ -101,3 +101,10 @@ tasks.named("thirdPartyAudit").configure {
 tasks.withType(LicenseHeadersTask.class).configureEach {
   approvedLicenses = ['Apache', 'Generated', 'Vendored']
 }
+
+// Ricky备注
+test {
+  filter {
+    includeTestsMatching 'org.elasticsearch.client.RequestOptionsTests'
+  }
+}

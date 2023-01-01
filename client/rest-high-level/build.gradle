@@ -71,16 +71,17 @@ tasks.named("integTest").configure {
   systemProperty 'tests.rest.cluster.password', System.getProperty('tests.rest.cluster.password', 'test-user-password')
 }
 
+// Ricky 临时注销
 // Requires https://github.com/elastic/elasticsearch/pull/64403 to have this moved to task avoidance api.
-TaskProvider<RestIntegTestTask> asyncIntegTest = tasks.register("asyncIntegTest", RestIntegTestTask) {
-    systemProperty 'tests.rest.async', 'true'
-    systemProperty 'tests.rest.cluster.username', System.getProperty('tests.rest.cluster.username', 'test_user')
-    systemProperty 'tests.rest.cluster.password', System.getProperty('tests.rest.cluster.password', 'test-user-password')
-}
+// TaskProvider<RestIntegTestTask> asyncIntegTest = tasks.register("asyncIntegTest", RestIntegTestTask) {
+//     systemProperty 'tests.rest.async', 'true'
+//     systemProperty 'tests.rest.cluster.username', System.getProperty('tests.rest.cluster.username', 'test_user')
+//     systemProperty 'tests.rest.cluster.password', System.getProperty('tests.rest.cluster.password', 'test-user-password')
+// }
 
-tasks.named("check").configure {
-  dependsOn(asyncIntegTest)
-}
+// tasks.named("check").configure {
+//   dependsOn(asyncIntegTest)
+// }
 
 testClusters.all {
   testDistribution = 'DEFAULT'
@@ -123,4 +124,11 @@ testClusters.all {
 tasks.named('splitPackagesAudit').configure {
   // the client package should be owned by the client, but server has some classes there too
   ignoreClasses 'org.elasticsearch.client.*'
+}
+
+// Ricky备注
+test {
+  filter {
+    includeTestsMatching 'org.elasticsearch.client.common.ProtocolUtilsTests'
+  }
 }

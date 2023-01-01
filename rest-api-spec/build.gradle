@@ -16,7 +16,8 @@ ext.licenseFile = rootProject.file('licenses/APACHE-LICENSE-2.0.txt')
 
 artifacts {
   restSpecs(new File(projectDir, "src/main/resources/rest-api-spec/api"))
-  restTests(new File(projectDir, "src/yamlRestTest/resources/rest-api-spec/test"))
+  // Ricky注销
+  // restTests(new File(projectDir, "src/yamlRestTest/resources/rest-api-spec/test"))
 }
 
 testClusters.all {

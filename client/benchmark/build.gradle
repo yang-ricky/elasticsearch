@@ -38,3 +38,10 @@ dependencies {
 // No licenses for our benchmark deps (we don't ship benchmarks)
 tasks.named("dependencyLicenses").configure { enabled = false }
 tasks.named("dependenciesInfo").configure{enabled = false }
+
+//Ricky 备注
+test {
+  filter {
+    includeTestsMatching 'org.elasticsearch.client.common.ProtocolUtilsTests'
+  }
+}

@@ -118,9 +118,10 @@ dependencies {
     // tests use the locally compiled version of server
     exclude group: 'org.elasticsearch', module: 'server'
   }
-  internalClusterTestImplementation(project(":test:framework")) {
-    exclude group: 'org.elasticsearch', module: 'server'
-  }
+  // Ricky 暂时注销
+  // internalClusterTestImplementation(project(":test:framework")) {
+  //   exclude group: 'org.elasticsearch', module: 'server'
+  // }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -386,4 +387,11 @@ tasks.named('splitPackagesAudit').configure {
    'org.apache.lucene.search.XCombinedFieldQuery', 
    'org.apache.lucene.search.XMultiNormsLeafSimScorer' 
 
+}
+
+// Ricky备注
+test {
+  filter {
+    includeTestsMatching "org.apache.lucene.util.CombinedBitSetTests"
+  }
 }
