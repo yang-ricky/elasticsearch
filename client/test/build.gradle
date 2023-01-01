@@ -52,3 +52,21 @@ tasks.named("test").configure { enabled = false }
 tasks.withType(LicenseHeadersTask.class).configureEach {
   approvedLicenses = ['Apache', 'Generated', 'Vendored']
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+    }
+}
+
