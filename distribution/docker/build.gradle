@@ -161,21 +161,21 @@ elasticsearch_distributions {
 }
 
 // ricky临时注销
-// tasks.named("preProcessFixture").configure {
-//   dependsOn elasticsearch_distributions.matching { it.architecture == Architecture.current() }
-//   dependsOn "copyNodeKeyMaterial"
-//   doLast {
-//     // tests expect to have an empty repo
-//     project.delete(
-//       "${buildDir}/repo",
-//     )
-//     createAndSetWritable(
-//       "${buildDir}/repo",
-//       "${buildDir}/logs/default-1",
-//       "${buildDir}/logs/default-2",
-//     )
-//   }
-// }
+tasks.named("preProcessFixture").configure {
+  dependsOn elasticsearch_distributions.matching { it.architecture == Architecture.current() }
+  dependsOn "copyNodeKeyMaterial"
+  doLast {
+    // tests expect to have an empty repo
+    project.delete(
+      "${buildDir}/repo",
+    )
+    createAndSetWritable(
+      "${buildDir}/repo",
+      "${buildDir}/logs/default-1",
+      "${buildDir}/logs/default-2",
+    )
+  }
+}
 
 tasks.named("processTestResources").configure {
   from project(':x-pack:plugin:core')
@@ -327,7 +327,7 @@ for (final Architecture architecture : Architecture.values()) {
  */
 subprojects { Project subProject ->
   // ricky临时后面加了一个hua
-  if (subProject.name.endsWith('-exporthua')) {
+  if (subProject.name.endsWith('-export')) {
     apply plugin: 'distribution'
 
     final Architecture architecture = subProject.name.contains('aarch64-') ? Architecture.AARCH64 : Architecture.X64
@@ -394,9 +394,9 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
-        if (task.name.contains("DockerImage")) {
-            task.enabled = false
-        }
+        // if (task.name.contains("DockerImage")) {
+        //     task.enabled = false
+        // }
 
     }
 }
