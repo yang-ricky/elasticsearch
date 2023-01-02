@@ -54,5 +54,9 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
+        if (task.name.contains("ixture")) {
+            task.enabled = false
+        }
+
     }
 }

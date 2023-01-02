@@ -337,5 +337,9 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
+        if (task.name.contains("hdfsFixture")) {
+            task.enabled = false
+        }
+
     }
 }

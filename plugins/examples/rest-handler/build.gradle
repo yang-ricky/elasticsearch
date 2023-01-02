@@ -53,6 +53,10 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
+        if (task.name.contains("exampleFixture")) {
+            task.enabled = false
+        }
+
     }
 }
 

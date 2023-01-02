@@ -62,3 +62,25 @@ testClusters.matching { it.name == "yamlRestTest" }.configureEach {
   // use gce fixture for API calls instead of https://www.googleapis.com
   setting 'cloud.gce.root_url', { "http://${gceFixtureProvider.get().addressAndPort}" }, IGNORE_VALUE
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+    }
+}

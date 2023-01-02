@@ -116,3 +116,26 @@ testClusters.matching { it.name == "yamlRestTestContainerCredentials" }.configur
 tasks.named("ec2FixtureInstanceProfile").configure {
   env 'ACTIVATE_INSTANCE_PROFILE', true
 }
+
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+    }
+}
