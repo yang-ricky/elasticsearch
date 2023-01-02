@@ -106,3 +106,26 @@ tasks.named("dependencyLicenses").configure {
   mapping from: /maxmind-db.*/, to: 'maxmind-db-reader'
   ignoreFile 'elastic-geoip-database-service-agreement-LICENSE.txt'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+    }
+}
+

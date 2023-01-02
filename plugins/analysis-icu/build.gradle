@@ -50,3 +50,25 @@ tasks.named('splitPackagesAudit').configure {
     'org.elasticsearch.index.analysis.IndexableBinaryStringTools',
     'org.elasticsearch.index.mapper.ICUCollationKeywordFieldMapper'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+    }
+}

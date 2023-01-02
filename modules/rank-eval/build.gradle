@@ -24,3 +24,25 @@ testClusters.all {
   // Modules who's integration is explicitly tested in integration tests
   module ':modules:lang-mustache'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+    }
+}

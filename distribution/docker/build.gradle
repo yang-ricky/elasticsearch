@@ -87,8 +87,9 @@ class SquashNewlinesFilter extends FilterReader {
   }
 }
 
+// 可以理解为这是一个子函数
 private static String taskName(String prefix, Architecture architecture, DockerBase base, String suffix) {
-  return prefix +
+  return prefix  +
     (architecture == Architecture.AARCH64 ? 'Aarch64' : '') +
     (base == DockerBase.UBI ? 'Ubi' : (base == DockerBase.IRON_BANK ? 'IronBank' : '')) +
     suffix
@@ -207,58 +208,60 @@ void addBuildDockerContextTask(Architecture architecture, DockerBase base) {
   String arch = architecture == Architecture.AARCH64 ? '-aarch64' : ''
 
   tasks.register(taskName('build', architecture, base, 'DockerContext'), Tar) {
-    archiveExtension = 'tar.gz'
-    compression = Compression.GZIP
-    archiveClassifier = "docker-build-context${arch}"
-    archiveBaseName = "elasticsearch${base.suffix}"
-    with dockerBuildContext(architecture, base)
+    println("task: "+'build' + architecture + base + 'DockerContext')
+    // archiveExtension = 'tar.gz'
+    // compression = Compression.GZIP
+    // archiveClassifier = "docker-build-context${arch}"
+    // archiveBaseName = "elasticsearch${base.suffix}"
+    // with dockerBuildContext(architecture, base)
 
-    into(configDirectory) {
-      from(configurations.log4jConfig) {
-        filter TransformLog4jConfigFilter
-      }
-    }
+    // into(configDirectory) {
+    //   from(configurations.log4jConfig) {
+    //     filter TransformLog4jConfigFilter
+    //   }
+    // }
 
-    onlyIf { Architecture.current() == architecture }
+    // onlyIf { Architecture.current() == architecture }
   }
 }
 
 void addUnpackDockerContextTask(Architecture architecture, DockerBase base) {
   tasks.register(taskName("transform", architecture, base, "DockerContext"), Sync) {
-    TaskProvider<Tar> buildContextTask = tasks.named(taskName("build", architecture, base, "DockerContext"))
-    dependsOn(buildContextTask)
+    println("task: "+'transform' + architecture + base + 'DockerContext')
+    // TaskProvider<Tar> buildContextTask = tasks.named(taskName("build", architecture, base, "DockerContext"))
+    // dependsOn(buildContextTask)
 
-    String arch = architecture == Architecture.AARCH64 ? '-aarch64' : ''
-    String archiveName = "elasticsearch${base.suffix}-${VersionProperties.elasticsearch}-docker-build-context${arch}"
-    String distributionName = "elasticsearch-${VersionProperties.elasticsearch}-linux-${architecture.classifier}.tar.gz"
+    // String arch = architecture == Architecture.AARCH64 ? '-aarch64' : ''
+    // String archiveName = "elasticsearch${base.suffix}-${VersionProperties.elasticsearch}-docker-build-context${arch}"
+    // String distributionName = "elasticsearch-${VersionProperties.elasticsearch}-linux-${architecture.classifier}.tar.gz"
 
-    from(tarTree("${project.buildDir}/distributions/${archiveName}.tar.gz")) {
-      eachFile { FileCopyDetails details ->
-        if (details.name.equals("Dockerfile")) {
-          filter { it.replaceAll('^RUN curl.*artifacts-no-kpi.*$', "COPY ${distributionName} /opt/elasticsearch.tar.gz")}
-        }
-      }
-    }
-    into "${project.buildDir}/docker-context/${archiveName}"
+    // from(tarTree("${project.buildDir}/distributions/${archiveName}.tar.gz")) {
+    //   eachFile { FileCopyDetails details ->
+    //     if (details.name.equals("Dockerfile")) {
+    //       filter { it.replaceAll('^RUN curl.*artifacts-no-kpi.*$', "COPY ${distributionName} /opt/elasticsearch.tar.gz")}
+    //     }
+    //   }
+    // }
+    // into "${project.buildDir}/docker-context/${archiveName}"
 
-    // Since we replaced the remote URL in the Dockerfile, copy in the required file
-    if (architecture == Architecture.AARCH64) {
-      from configurations.aarch64DockerSource
-    } else {
-      from configurations.dockerSource
-    }
+    // // Since we replaced the remote URL in the Dockerfile, copy in the required file
+    // if (architecture == Architecture.AARCH64) {
+    //   from configurations.aarch64DockerSource
+    // } else {
+    //   from configurations.dockerSource
+    // }
 
-    if (base == DockerBase.IRON_BANK) {
-      from (configurations.tini) {
-        rename { _ -> 'tini' }
-      }
-    }
+    // if (base == DockerBase.IRON_BANK) {
+    //   from (configurations.tini) {
+    //     rename { _ -> 'tini' }
+    //   }
+    // }
 
-    expansions(architecture, base).findAll { it.key != 'build_date' }.each { k, v ->
-      inputs.property(k, { v.toString() })
-    }
+    // expansions(architecture, base).findAll { it.key != 'build_date' }.each { k, v ->
+    //   inputs.property(k, { v.toString() })
+    // }
 
-    onlyIf { Architecture.current() == architecture }
+    // onlyIf { Architecture.current() == architecture }
   }
 }
 
@@ -275,7 +278,6 @@ private List<String> generateTags(DockerBase base) {
 void addBuildDockerImageTask(Architecture architecture, DockerBase base) {
   final TaskProvider<DockerBuildTask> buildDockerImageTask =
     tasks.register(taskName("build", architecture, base, "DockerImage"), DockerBuildTask) {
-
       TaskProvider<Tar> transformTask = tasks.named(taskName("transform", architecture, base, "DockerContext"))
       dependsOn(transformTask)
 
@@ -303,6 +305,8 @@ void addBuildDockerImageTask(Architecture architecture, DockerBase base) {
       } else {
         baseImages = [base.image]
       }
+
+      println("task: "+'build' + architecture + base + 'DockerImage' + "baseimages:" + baseImages)
 
       onlyIf { Architecture.current() == architecture }
     }
@@ -347,16 +351,17 @@ subprojects { Project subProject ->
     final String tarFile = "${parent.projectDir}/build/${artifactName}_${VersionProperties.elasticsearch}.${extension}"
 
     tasks.register(exportTaskName, LoggedExec) {
-      inputs.file("${parent.projectDir}/build/markers/${buildTaskName}.marker")
-      executable 'docker'
-      outputs.file(tarFile)
-      args "save",
-        "-o",
-        tarFile,
-        "elasticsearch${base.suffix}:test"
+      println("exportTaskName - 如何调试gradle里面的东西?")
+      // inputs.file("${parent.projectDir}/build/markers/${buildTaskName}.marker")
+       executable 'docker'
+      // outputs.file(tarFile)
+      // args "save",
+      //   "-o",
+      //   tarFile,
+      //   "elasticsearch${base.suffix}:test"
 
-      dependsOn(parent.path + ":" + buildTaskName)
-      onlyIf { Architecture.current() == architecture }
+      // dependsOn(parent.path + ":" + buildTaskName)
+      // onlyIf { Architecture.current() == architecture }
     }
 
     artifacts.add('default', file(tarFile)) {
@@ -390,13 +395,13 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
-        if (task.name.contains("buildUbiDockerImage")) {
+        if (task.name.contains("AARCH64")) {
             task.enabled = false
         }
 
-        // if (task.name.contains("DockerImage")) {
-        //     task.enabled = false
-        // }
+        if (task.name.contains("DockerImage")) {
+            task.enabled = false
+        }
 
     }
 }

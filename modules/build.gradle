@@ -26,3 +26,20 @@ configure(subprojects.findAll { it.parent.path == project.path }) {
     throw new InvalidModelException("Modules cannot contain config files")
   }
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+    }
+}

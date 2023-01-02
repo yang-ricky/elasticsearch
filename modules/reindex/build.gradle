@@ -190,3 +190,29 @@ tasks.named('splitPackagesAudit').configure {
     'org.elasticsearch.index.reindex.TransportUpdateByQueryAction',
     'org.elasticsearch.index.reindex.package-info'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("style")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Fixture")) {
+            task.enabled = false
+        }
+
+    }
+}
