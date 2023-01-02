@@ -350,10 +350,11 @@ subprojects { Project subProject ->
     final String buildTaskName = taskName('build', architecture, base, 'DockerImage')
     final String tarFile = "${parent.projectDir}/build/${artifactName}_${VersionProperties.elasticsearch}.${extension}"
 
+
     tasks.register(exportTaskName, LoggedExec) {
-      println("exportTaskName - 如何调试gradle里面的东西?")
-      // inputs.file("${parent.projectDir}/build/markers/${buildTaskName}.marker")
-       executable 'docker'
+      println(exportTaskName + "exportTaskName - 如何调试gradle里面的东西?")
+      //inputs.file("${parent.projectDir}/build/markers/${buildTaskName}.marker")
+      executable 'docker'
       // outputs.file(tarFile)
       // args "save",
       //   "-o",
@@ -396,6 +397,10 @@ gradle.taskGraph.whenReady {
         }
 
         if (task.name.contains("AARCH64")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("exportDockerImage")) {
             task.enabled = false
         }
 

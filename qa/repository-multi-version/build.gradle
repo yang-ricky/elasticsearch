@@ -80,18 +80,18 @@ for (Version bwcVersion : BuildParams.bwcVersions.indexCompatible) {
 }
 
 // 跳过测试
-gradle.taskGraph.whenReady {
-    tasks.each { task ->
-        if (task.name.contains("test")) {
-            task.enabled = false
-        }
+// gradle.taskGraph.whenReady {
+//     tasks.each { task ->
+//         if (task.name.contains("test")) {
+//             task.enabled = false
+//         }
 
-        if (task.name.contains("Test")) {
-            task.enabled = false
-        }
+//         if (task.name.contains("Test")) {
+//             task.enabled = false
+//         }
 
-        if (task.name.contains("compose")) {
-            task.enabled = false
-        }
-    }
-}
+//         if (task.name.contains("compose")) {
+//             task.enabled = false
+//         }
+//     }
+// }
