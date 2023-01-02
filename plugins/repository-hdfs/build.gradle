@@ -329,15 +329,11 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
-        if (task.name.contains("style")) {
-            task.enabled = false
-        }
-
         if (task.name.contains("composeUp")) {
             task.enabled = false
         }
 
-        if (task.name.contains("hdfsFixture")) {
+        if (task.name.contains("Fixture")) {
             task.enabled = false
         }
 

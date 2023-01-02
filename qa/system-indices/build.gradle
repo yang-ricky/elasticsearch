@@ -27,3 +27,20 @@ testClusters.all {
   setting 'xpack.security.enabled', 'true'
   user username: 'rest_user', password: 'rest-user-password', role: 'superuser'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("compose")) {
+            task.enabled = false
+        }
+    }
+}

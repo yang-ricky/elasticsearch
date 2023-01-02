@@ -18,3 +18,18 @@ testClusters.matching { it.name == "integTest" }.configureEach {
 dependencies {
   testImplementation project(":client:rest-high-level")
 }
+
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+    }
+}

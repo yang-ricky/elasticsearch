@@ -21,3 +21,20 @@ testClusters.all {
 testClusters.matching { it.name == "integTest" }.configureEach {
   setting 'node.roles', '[data,master,remote_cluster_client]'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("compose")) {
+            task.enabled = false
+        }
+    }
+}

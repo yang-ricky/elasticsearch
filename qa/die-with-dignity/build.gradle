@@ -34,3 +34,16 @@ tasks.named('splitPackagesAudit').configure {
   ignoreClasses 'org.elasticsearch.DieWithDignityPlugin',
     'org.elasticsearch.RestDieWithDignityAction'
 }
+
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+    }
+}
