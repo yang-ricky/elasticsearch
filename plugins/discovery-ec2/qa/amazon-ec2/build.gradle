@@ -129,7 +129,7 @@ gradle.taskGraph.whenReady {
             task.enabled = false
         }
 
-        if (task.name.contains("style")) {
+        if (task.name.contains("ec2FixtureContainerCredentials")) {
             task.enabled = false
         }
 
