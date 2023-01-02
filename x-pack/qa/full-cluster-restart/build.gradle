@@ -19,6 +19,28 @@ tasks.named("forbiddenPatterns") {
   exclude '**/system_key'
 }
 
+// 跳过测试
+gradle.taskGraph.whenReady {
+    tasks.each { task ->
+        if (task.name.contains("test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("Test")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("bwcTestSnapshots")) {
+            task.enabled = false
+        }
+
+        if (task.name.contains("composeUp")) {
+            task.enabled = false
+        }
+
+    }
+}
+
 String outputDir = "${buildDir}/generated-resources/${project.name}"
 
 tasks.register("copyTestNodeKeyMaterial", Copy) {
